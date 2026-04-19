@@ -1,0 +1,81 @@
+/* ── Layout shell ── */
+.app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #F8FAFC;
+}
+
+/* Navbar is fixed at 64px tall — push all page content below it */
+.app-main {
+  flex: 1;
+  padding-top: 64px; /* matches .nb__inner height */
+}
+
+.btn-primary {
+  background-color: #10B981; /* primary-500 */
+  color: #FFFFFF;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  text-align: center;
+}
+
+.btn-primary:hover {
+  background-color: #059669; /* primary-600 */
+}
+
+.btn-primary:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(110, 231, 183, 0.5); /* primary-300 */
+}
+
+.btn-secondary {
+  background-color: #475569; /* mountain-600 */
+  color: #FFFFFF;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  text-align: center;
+}
+
+.btn-secondary:hover {
+  background-color: #334155; /* mountain-700 */
+}
+
+.btn-secondary:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(100, 116, 139, 0.5); /* mountain-300 equivalent */
+}
+
+.gradient-text {
+  background: linear-gradient(to right, #10B981, #475569); /* primary-500 to mountain-600 */
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.navbar-scroll {
+  background-color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}

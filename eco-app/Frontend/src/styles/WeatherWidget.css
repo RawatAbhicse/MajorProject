@@ -1,0 +1,238 @@
+.weather-widget {
+  background-color: #FFFFFF;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.weather-loading {
+  padding: 1rem;
+}
+
+.loading-pulse {
+  animation: pulse 1.5s infinite;
+}
+
+.loading-bar1 {
+  height: 1rem;
+  background-color: #E2E8F0; /* mountain-200 */
+  border-radius: 0.25rem;
+  width: 50%;
+  margin-bottom: 0.5rem;
+}
+
+.loading-bar2 {
+  height: 2rem;
+  background-color: #E2E8F0; /* mountain-200 */
+  border-radius: 0.25rem;
+  width: 75%;
+  margin-bottom: 0.5rem;
+}
+
+.loading-bar3 {
+  height: 1rem;
+  background-color: #E2E8F0; /* mountain-200 */
+  border-radius: 0.25rem;
+  width: 66%;
+}
+
+.weather-compact {
+  padding: 0.75rem;
+}
+
+.weather-compact-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.weather-compact-location {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #475569; /* mountain-600 */
+}
+
+.weather-compact-main {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.weather-compact-temperature {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1E293B; /* mountain-900 */
+}
+
+.weather-compact-info {
+  text-align: right;
+}
+
+.weather-compact-description {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #475569; /* mountain-600 */
+}
+
+.weather-compact-range {
+  font-size: 0.75rem;
+  color: #64748B; /* mountain-500 */
+}
+
+.weather-main {
+  padding: 1.5rem;
+  background: linear-gradient(90deg, #10B981, #475569); /* mountain-gradient */
+  color: #FFFFFF;
+}
+
+.weather-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.weather-location {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.weather-description {
+  font-size: 0.875rem;
+  color: #F1F5F9; /* mountain-100 */
+}
+
+.weather-temperature {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.weather-details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: #F1F5F9; /* mountain-100 */
+}
+
+.weather-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.weather-detail-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.forecast-section {
+  padding: 1rem;
+  background-color: #F8FAFC; /* mountain-50 */
+}
+
+.forecast-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #475569; /* mountain-700 */
+  margin-bottom: 0.75rem;
+}
+
+.forecast-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.forecast-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+}
+
+.forecast-day-container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+}
+
+.forecast-day {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #475569; /* mountain-700 */
+  width: 4rem;
+}
+
+.forecast-details {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 0.875rem;
+}
+
+.forecast-precipitation {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #3B82F6; /* blue-500 */
+}
+
+.precipitation-icon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.forecast-temperatures {
+  font-weight: 500;
+  color: #475569; /* mountain-600 */
+}
+
+.forecast-low {
+  color: #64748B; /* mountain-400 */
+  margin-left: 0.25rem;
+}
+
+.weather-alert {
+  padding: 1rem;
+  background-color: #FEFCE8; /* yellow-50 */
+  border-top: 1px solid #FEF9C3; /* yellow-100 */
+}
+
+.alert-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.alert-indicator {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: #F4B400; /* yellow-400 */
+  border-radius: 50%;
+  margin-top: 0.375rem;
+  flex-shrink: 0;
+}
+
+.alert-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #78350F; /* yellow-800 */
+}
+
+.alert-description {
+  font-size: 0.75rem;
+  color: #92400E; /* yellow-700 */
+  margin-top: 0.25rem;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

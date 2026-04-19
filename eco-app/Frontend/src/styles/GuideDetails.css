@@ -1,0 +1,245 @@
+/* ── Container ── */
+.gd-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  padding: 2rem 1rem 4rem;
+}
+
+.gd-content {
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+.gd-status {
+  text-align: center;
+  padding: 4rem;
+  font-size: 1.1rem;
+  color: #64748b;
+}
+.gd-error { color: #ef4444; }
+
+/* ── Back Button ── */
+.gd-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: none;
+  border: none;
+  color: #059669;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-bottom: 1.25rem;
+  padding: 0;
+}
+.gd-back:hover { color: #047857; text-decoration: underline; }
+
+/* ── Hero ── */
+.gd-hero {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  height: 360px;
+  margin-bottom: 1.25rem;
+}
+
+.gd-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gd-hero-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 2rem 1.5rem 1.25rem;
+  background: linear-gradient(transparent, rgba(0,0,0,0.72));
+  color: #fff;
+}
+
+.gd-name {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+
+.gd-location {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.95rem;
+  opacity: 0.9;
+  margin-bottom: 0.4rem;
+}
+
+.gd-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.gd-star { color: #fbbf24; fill: #fbbf24; }
+.gd-rating-val  { font-weight: 700; }
+.gd-rating-count { font-size: 0.85rem; opacity: 0.8; }
+
+/* Availability badge on hero */
+.gd-availability-badge {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.gd-availability-badge.avail { background: #d1fae5; color: #065f46; }
+.gd-availability-badge.busy  { background: #fee2e2; color: #991b1b; }
+
+/* ── Stats Strip ── */
+.gd-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  background: #fff;
+  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  margin-bottom: 1.5rem;
+}
+
+.gd-stat {
+  flex: 1;
+  min-width: 100px;
+  text-align: center;
+  padding: 0.5rem 0;
+  border-right: 1px solid #e5e7eb;
+}
+.gd-stat:last-child { border-right: none; }
+
+.gd-stat-icon  { color: #10b981; margin: 0 auto 0.25rem; }
+.gd-stat-value { font-size: 1.2rem; font-weight: 700; color: #1e293b; margin: 0; }
+.gd-stat-label { font-size: 0.75rem; color: #94a3b8; margin: 0; }
+
+/* ── Body Layout ── */
+.gd-body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+@media (min-width: 900px) {
+  .gd-body { grid-template-columns: 1fr 280px; align-items: start; }
+}
+
+/* ── Left Sections ── */
+.gd-section {
+  background: #fff;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  margin-bottom: 1.25rem;
+}
+
+.gd-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.75rem;
+}
+
+.gd-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.gd-tag {
+  background: #ecfdf5;
+  color: #065f46;
+  padding: 0.3rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.gd-tag-lang {
+  background: #eff6ff;
+  color: #1e40af;
+}
+
+.gd-cert-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.gd-cert-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #374151;
+}
+.gd-cert-icon { color: #10b981; flex-shrink: 0; }
+
+/* ── Sidebar / Contact Card ── */
+.gd-sidebar { position: sticky; top: 80px; }
+
+.gd-contact-card {
+  background: #fff;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.gd-price {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.25rem;
+}
+.gd-price-sub {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #64748b;
+}
+
+.gd-contact-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.gd-contact-btn:hover { opacity: 0.85; }
+
+.gd-btn-phone { background: #ecfdf5; color: #065f46; }
+.gd-btn-email { background: #eff6ff; color: #1e40af; }
+
+.gd-avail-status {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 0;
+  border-top: 1px solid #f1f5f9;
+}
+.gd-avail-status.avail { color: #059669; }
+.gd-avail-status.busy  { color: #dc2626; }
+
+/* ── Responsive ── */
+@media (min-width: 768px) {
+  .gd-name { font-size: 2.5rem; }
+  .gd-hero { height: 440px; }
+}
