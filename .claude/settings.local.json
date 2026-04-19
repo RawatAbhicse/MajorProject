@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "WebSearch",
-      "WebFetch(domain:commons.wikimedia.org)"
+      "WebFetch(domain:commons.wikimedia.org)",
+      "Bash(node seed.js)",
+      "WebFetch(domain:upload.wikimedia.org)"
     ]
   }
 }
