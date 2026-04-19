@@ -1,0 +1,241 @@
+/* ── Container ── */
+.trek-details-container {
+  min-height: 100vh;
+  background-color: #F8FAFC;
+  padding: 2rem 1rem 4rem;
+}
+
+.trek-details-content {
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+.trek-details-status {
+  text-align: center;
+  padding: 4rem;
+  font-size: 1.1rem;
+  color: #64748B;
+}
+.trek-details-status.error { color: #ef4444; }
+
+/* ── Hero ── */
+.trek-details-hero {
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  height: 380px;
+}
+
+.trek-details-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.trek-details-hero-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem 1.5rem 1.5rem;
+  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  color: #fff;
+}
+
+.trek-details-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.trek-details-location {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+/* ── Stats Bar ── */
+.trek-details-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  background: #fff;
+  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  margin-bottom: 1.5rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-right: 1.25rem;
+  border-right: 1px solid #e2e8f0;
+  min-width: 120px;
+}
+.stat-item:last-child { border-right: none; }
+
+.stat-icon { color: #475569; flex-shrink: 0; }
+
+.stat-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.stat-difficulty {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.stat-reviews {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #64748b;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.eco-label { color: #10b981; }
+
+/* ── Body Layout ── */
+.trek-details-body {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 900px) {
+  .trek-details-body {
+    grid-template-columns: 1fr 320px;
+    align-items: start;
+  }
+}
+
+/* ── Left Column ── */
+.trek-details-section {
+  background: #fff;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.75rem;
+}
+
+.trek-details-description {
+  color: #475569;
+  line-height: 1.75;
+  font-size: 0.95rem;
+}
+
+.trek-details-map {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  height: 320px;
+}
+
+/* ── Sidebar / Booking Card ── */
+.trek-details-sidebar {
+  position: sticky;
+  top: 80px;
+}
+
+.booking-card {
+  background: #fff;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.booking-price {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+
+.booking-price-sub {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #64748b;
+}
+
+/* ── Weather Card (inside booking card) ── */
+.weather-card {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.weather-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #166534;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.weather-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #15803d;
+  margin-bottom: 0.25rem;
+}
+
+/* ── Book Button ── */
+.trek-details-book {
+  width: 100%;
+  background-color: #10B981;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.85rem 1.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-bottom: 1rem;
+}
+
+.trek-details-book:hover { background-color: #059669; }
+
+/* ── Booking Features ── */
+.booking-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.booking-features li {
+  font-size: 0.85rem;
+  color: #475569;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+.booking-features li:last-child { border-bottom: none; }
+
+/* ── Responsive ── */
+@media (min-width: 768px) {
+  .trek-details-title { font-size: 2.5rem; }
+  .trek-details-hero  { height: 460px; }
+}

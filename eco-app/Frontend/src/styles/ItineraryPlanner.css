@@ -1,0 +1,326 @@
+/* ── Page Layout ── */
+.ip-page {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.ip-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+@media (min-width: 900px) {
+  .ip-container { grid-template-columns: 280px 1fr; align-items: start; }
+}
+
+/* ── Sidebar ── */
+.ip-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: sticky;
+  top: 80px;
+}
+
+.ip-sidebar__section {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.ip-sidebar__heading {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.ip-trek-info__img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.ip-trek-info__name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+.ip-trek-info__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+.ip-trek-info__meta span { display: flex; align-items: center; gap: 0.25rem; }
+
+.ip-summary { display: flex; flex-direction: column; gap: 0.4rem; }
+.ip-summary__row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #64748b;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+.ip-summary__row strong { color: #1e293b; }
+
+.ip-sidebar__actions { display: flex; flex-direction: column; gap: 0.5rem; }
+
+/* ── Buttons ── */
+.ip-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+}
+.ip-btn--primary { background: linear-gradient(135deg,#10b981,#059669); color:#fff; }
+.ip-btn--primary:hover { opacity: 0.9; box-shadow: 0 4px 12px rgba(16,185,129,0.35); }
+.ip-btn--outline { background: #fff; color: #374151; border: 1.5px solid #d1d5db; }
+.ip-btn--outline:hover { border-color: #10b981; color: #059669; }
+.ip-btn--add { background: #ecfdf5; color: #059669; border: 1.5px solid #a7f3d0; }
+.ip-btn--add:hover { background: #d1fae5; }
+
+.ip-btn-sm {
+  padding: 0.45rem 0.9rem;
+  background: #10b981;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.ip-btn-sm:hover { background: #059669; }
+
+.ip-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background: #f3f4f6;
+  color: #6b7280;
+  transition: all 0.12s;
+  flex-shrink: 0;
+}
+.ip-btn-icon:hover { background: #e5e7eb; color: #374151; }
+.ip-btn-icon--green { background: #ecfdf5; color: #059669; }
+.ip-btn-icon--green:hover { background: #d1fae5; }
+.ip-btn-icon--danger { background: #fef2f2; color: #dc2626; }
+.ip-btn-icon--danger:hover { background: #fee2e2; }
+.ip-btn-icon--ghost { background: transparent; }
+.ip-btn-icon--ghost:hover { background: #f3f4f6; }
+
+/* ── Inputs ── */
+.ip-input {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #1e293b;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+.ip-input:focus { border-color: #10b981; box-shadow: 0 0 0 3px rgba(16,185,129,0.1); }
+.ip-input--sm { padding: 0.4rem 0.6rem; font-size: 0.82rem; }
+.ip-textarea { resize: vertical; min-height: 60px; font-family: inherit; }
+.ip-textarea--notes { background: #fffbeb; border-color: #fde68a; }
+.ip-textarea--notes:focus { border-color: #f59e0b; box-shadow: 0 0 0 3px rgba(245,158,11,0.1); }
+
+.ip-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: -0.1rem;
+}
+
+/* ── Main ── */
+.ip-main { min-width: 0; }
+
+.ip-main__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.ip-page-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 0.25rem;
+}
+.ip-page-subtitle {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ── Empty State ── */
+.ip-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  background: #fff;
+  border-radius: 12px;
+  border: 2px dashed #d1d5db;
+  gap: 0.75rem;
+}
+.ip-empty__icon { color: #d1d5db; }
+.ip-empty h3 { font-size: 1.15rem; font-weight: 700; color: #1e293b; margin: 0; }
+.ip-empty p  { color: #64748b; max-width: 360px; margin: 0; font-size: 0.9rem; }
+
+/* ── Days List ── */
+.ip-days-list { display: flex; flex-direction: column; gap: 0.75rem; }
+.ip-dragging { opacity: 0.85; transform: rotate(1deg); }
+
+/* ── Day Card ── */
+.ip-day {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  border: 1.5px solid #e5e7eb;
+  overflow: hidden;
+  transition: box-shadow 0.15s;
+}
+.ip-day:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+.ip-day__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  background: #f9fafb;
+  border-bottom: 1px solid #f3f4f6;
+  cursor: grab;
+}
+.ip-day__header:active { cursor: grabbing; }
+
+.ip-day__drag-handle { color: #d1d5db; flex-shrink: 0; }
+.ip-day__num {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  background: #10b981;
+  padding: 0.15rem 0.5rem;
+  border-radius: 100px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ip-day__title-row { display: flex; align-items: center; gap: 0.4rem; flex: 1; min-width: 0; }
+.ip-day__title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ip-day__title-edit { display: flex; align-items: center; gap: 0.3rem; flex: 1; }
+.ip-day__title-input { flex: 1; }
+.ip-day__date { font-size: 0.75rem; color: #94a3b8; white-space: nowrap; margin-left: auto; }
+.ip-day__header-actions { display: flex; gap: 0.25rem; flex-shrink: 0; }
+
+.ip-day__body { padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem; }
+
+.ip-day__stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+@media (min-width: 640px) { .ip-day__stats { grid-template-columns: repeat(4, 1fr); } }
+
+.ip-stat { display: flex; align-items: center; gap: 0.35rem; }
+.ip-stat__icon { color: #10b981; flex-shrink: 0; }
+.ip-stat__icon--down { transform: scaleY(-1); color: #f59e0b; }
+
+.ip-day__camp-meals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+.ip-camp { display: flex; align-items: center; gap: 0.35rem; flex: 1; min-width: 180px; }
+.ip-meals { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+.ip-meal-check {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  color: #374151;
+  cursor: pointer;
+}
+.ip-meal-check input { accent-color: #10b981; }
+
+.ip-activities { display: flex; flex-direction: column; gap: 0.4rem; }
+.ip-activity-input { display: flex; gap: 0.5rem; }
+.ip-activity-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.ip-activity-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: #ecfdf5;
+  color: #065f46;
+  padding: 0.25rem 0.6rem;
+  border-radius: 100px;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+.ip-activity-remove {
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0;
+}
+.ip-activity-remove:hover { color: #dc2626; }
+
+/* ── Print ── */
+@media print {
+  .ip-print-hide { display: none !important; }
+  .ip-print-only { display: block !important; }
+  .ip-day { break-inside: avoid; box-shadow: none; border: 1px solid #e5e7eb; }
+  .ip-day__header { background: #f0fdf4; }
+}
+.ip-print-only { display: none; }
+.ip-print-header h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.25rem; }
+.ip-print-header p  { color: #64748b; font-size: 0.9rem; margin: 0; }
