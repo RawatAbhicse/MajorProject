@@ -7,6 +7,7 @@ import guideRoutes from './routes/guides.js';
 import weatherRoutes from './routes/weather.js';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/users.js';
+import friendRoutes from './routes/friends.js';
 import auth from './middleware/auth.js';
 dotenv.config();
 
@@ -37,6 +38,7 @@ app.use('/api/guides',auth, guideRoutes);
 app.use('/api/weather',auth, weatherRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', auth, userRoutes);
+app.use('/api/friends', auth, friendRoutes);
 
 // Error Handling
 app.use((err, req, res, next) => {
