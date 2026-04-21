@@ -44,6 +44,7 @@
 .bt-sidebar {
   position: sticky;
   top: 80px;
+  align-self: start;
 }
 
 /* ── Inputs ── */
@@ -195,6 +196,7 @@
 .bt-expense-row {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.75rem;
   padding: 0.75rem 0;
   border-bottom: 1px solid #f1f5f9;
@@ -213,7 +215,14 @@
 .bt-expense-desc { font-size: 0.875rem; font-weight: 500; color: #1e293b; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .bt-expense-meta { font-size: 0.75rem; color: #94a3b8; margin: 0; }
 
-.bt-expense-amount-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: 0.2rem; flex-shrink: 0; }
+.bt-expense-amount-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+  flex-shrink: 0;
+  margin-left: auto;
+}
 .bt-expense-total { font-size: 0.9rem; font-weight: 700; color: #1e293b; }
 .bt-expense-input {
   width: 90px;
@@ -255,3 +264,75 @@
 .bt-breakdown-bar { flex: 1; height: 8px; background: #f1f5f9; border-radius: 4px; overflow: hidden; }
 .bt-breakdown-bar__fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
 .bt-breakdown-amount { font-size: 0.82rem; font-weight: 700; color: #1e293b; white-space: nowrap; min-width: 80px; text-align: right; }
+
+@media (max-width: 899px) {
+  .bt-sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 639px) {
+  .bt-page {
+    padding-inline: 0.75rem;
+  }
+
+  .bt-card {
+    padding: 1rem;
+  }
+
+  .bt-row,
+  .bt-actions,
+  .bt-breakdown-bar-wrap,
+  .bt-budget-bar-labels {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .bt-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .bt-view-toggle {
+    width: 100%;
+  }
+
+  .bt-toggle-btn {
+    flex: 1;
+  }
+
+  .bt-per-person {
+    white-space: normal;
+  }
+
+  .bt-expense-row {
+    align-items: flex-start;
+  }
+
+  .bt-expense-info,
+  .bt-expense-amount-wrap {
+    width: 100%;
+  }
+
+  .bt-expense-desc {
+    white-space: normal;
+  }
+
+  .bt-expense-amount-wrap {
+    align-items: flex-start;
+    margin-left: 0;
+  }
+
+  .bt-expense-input {
+    width: 100%;
+    text-align: left;
+  }
+
+  .bt-remove-btn {
+    margin-left: auto;
+  }
+
+  .bt-breakdown-amount {
+    min-width: 0;
+    text-align: left;
+  }
+}

@@ -1,6 +1,6 @@
 .friends-chat {
   display: flex;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 64px);
   background: radial-gradient(circle at top left, #e8fff3 0%, #f5f9ff 40%, #eef2ff 100%);
   overflow: hidden;
 }
@@ -221,11 +221,15 @@
   flex-direction: column;
   padding: 22px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.86) 0%, rgba(244, 249, 255, 0.86) 100%);
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .messages {
   flex: 1;
-  overflow-y: auto; 
+  min-height: 0;
+  overflow-y: auto;
   border: 1px solid #dce7ff;
   border-radius: 14px;
   padding: 12px;
@@ -405,4 +409,92 @@
 
 .create-btn {
   background: linear-gradient(135deg, #417bff 0%, #5b48e0 100%);
+}
+
+@media (max-width: 900px) {
+  .friends-chat {
+    flex-direction: column;
+    height: calc(100dvh - 64px);
+    overflow: hidden;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #dbe8ff;
+    padding: 16px 14px;
+    flex-shrink: 0;
+  }
+
+  .sidebar h3 {
+    margin-top: 0;
+  }
+
+  .chat-area {
+    padding: 18px 14px;
+  }
+}
+
+@media (max-width: 640px) {
+  .friends-tabs {
+    grid-template-columns: repeat(4, minmax(110px, 1fr));
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .friends-tabs button {
+    white-space: nowrap;
+  }
+
+  .create-group-btn {
+    width: 100%;
+  }
+
+  .sidebar li,
+  .request-item,
+  .search-result-item {
+    flex-wrap: wrap;
+  }
+
+  .request-actions {
+    width: 100%;
+  }
+
+  .request-actions button,
+  .search-result-item button {
+    flex: 1;
+  }
+
+  .chat-area h3 {
+    margin-top: 0;
+  }
+
+  .messages {
+    min-height: 0;
+  }
+
+  .message-text {
+    max-width: 88%;
+  }
+
+  .message-input {
+    flex-direction: column;
+  }
+
+  .message-input button {
+    width: 100%;
+  }
+
+  .group-modal {
+    width: calc(100vw - 20px);
+    padding: 14px;
+  }
+
+  .group-modal-actions {
+    flex-direction: column;
+  }
+
+  .group-modal-actions button {
+    width: 100%;
+  }
 }
