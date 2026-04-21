@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   phone: { type: String },
   location: { type: String },
   bio: { type: String },
+  friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 }, { timestamps: true });
 
 export default mongoose.model('User', userSchema);

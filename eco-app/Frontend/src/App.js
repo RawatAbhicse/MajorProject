@@ -12,6 +12,7 @@ import GuideList from './pages/GuideList';
 import GuideDetails from './pages/GuideDetails';
 import UserProfile from './pages/UserProfile';
 import Booking from './pages/Booking';
+import FriendsChat from './pages/FriendsChat';
 import './App.css';
 
 // Redirect logged-in users away from login page
@@ -46,6 +47,7 @@ function App() {
             <Route path="/budget" element={<ProtectedRoute><BudgetTracker /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
             <Route path="/booking/:id" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
+            <Route path="/friends" element={<ProtectedRoute><FriendsChat /></ProtectedRoute>} />
           </Routes>
         </main>
       </div>
