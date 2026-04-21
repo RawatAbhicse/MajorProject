@@ -15,7 +15,10 @@ export function AuthProvider({ children }) {
       return;
     }
     userApi.me()
-      .then(res => setUser(res.data))
+      .then(res => {
+        setUser(res.data);
+        localStorage.setItem('userId', res.data.id);
+      })
       .catch(() => localStorage.removeItem('token'))
       .finally(() => setLoading(false));
   }, []);
@@ -27,6 +30,7 @@ export function AuthProvider({ children }) {
         localStorage.setItem('token', response.data.token);
         const profile = await userApi.me();
         setUser(profile.data);
+        localStorage.setItem('userId', profile.data.id);
         return { success: true };
       }
       return { success: false, error: response.data.error };
@@ -51,6 +55,7 @@ export function AuthProvider({ children }) {
   const logout = () => {
     authApi.logout();
     setUser(null);
+    localStorage.removeItem('userId');
   };
 
   return (
