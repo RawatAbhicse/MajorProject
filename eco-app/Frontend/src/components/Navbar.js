@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Mountain, Menu, X, User, LogOut, Map, Home, BookOpen, DollarSign, Users, ChevronDown } from 'lucide-react';
+import { Mountain, Menu, X, User, LogOut, Map, Home, BookOpen, DollarSign, Users, ChevronDown, MessageCircle } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import '../styles/Navbar.css';
 
@@ -8,6 +8,7 @@ const navLinks = [
   { path: '/home',    label: 'Home',     icon: Home },
   { path: '/treks',   label: 'Treks',    icon: Map },
   { path: '/guides',  label: 'Guides',   icon: Users },
+  { path: '/friends', label: 'Friends',  icon: MessageCircle },
   { path: '/planner', label: 'Planner',  icon: BookOpen },
   { path: '/budget',  label: 'Budget',   icon: DollarSign },
 ];
