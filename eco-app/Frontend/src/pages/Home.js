@@ -199,8 +199,8 @@ const Home = () => {
                 </Link>
               </div>
             </div>
-            <div className="mt-6 lg:mt-0">
-              <WeatherWidget location="Uttarakhand" />
+             <div className="mt-6 lg:mt-0">
+              <WeatherWidget location="Dehradun" lat={30.3165} lon={78.0322} />
             </div>
           </div>
         </div>
