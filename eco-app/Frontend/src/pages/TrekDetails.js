@@ -4,6 +4,7 @@ import { MapPin, Clock, Users, Star, Leaf, Sun, Wind, Droplets } from 'lucide-re
 import MapView from '../components/MapView';
 import { trekApi } from '../services/api';
 import api from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 import '../styles/TrekDetails.css';
 
 const difficultyColor = { easy: '#16a34a', moderate: '#d97706', hard: '#dc2626' };
@@ -12,11 +13,21 @@ const seasonLabel = { spring: 'Spring', summer: 'Summer', autumn: 'Autumn', wint
 const TrekDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [trek, setTrek] = useState(null);
   const [weather, setWeather] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewComment, setReviewComment] = useState('');
+  const [reviewStatus, setReviewStatus] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const loadReviews = (trekId) =>
+    trekApi.getReviews(trekId)
+      .then((res) => setReviews(res.data.reviews || []))
+      .catch(() => setReviews([]));
 
   useEffect(() => {
     if (!id) {
@@ -25,21 +36,56 @@ const TrekDetails = () => {
       return;
     }
 
-    setLoading(true);
-    setError(null);
+    let cancelled = false;
 
-    trekApi.getById(id)
-      .then((res) => {
-        setTrek(res.data);
-        return api.get('/weather', { params: { lat: res.data.lat, lon: res.data.lon } });
-      })
-      .then((res) => setWeather(res.data))
-      .catch((err) => {
+    const run = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const trekRes = await trekApi.getById(id);
+        if (cancelled) return;
+        setTrek(trekRes.data);
+
+        // Reviews are public; failures shouldn't block the page.
+        loadReviews(id);
+
+        // Weather is auth-protected; treat it as optional.
+        api.get('/weather', { params: { lat: trekRes.data.lat, lon: trekRes.data.lon } })
+          .then((res) => { if (!cancelled) setWeather(res.data); })
+          .catch(() => {});
+      } catch (err) {
         const msg = err.response?.data?.error || 'Failed to load trek details';
-        setError(msg);
-      })
-      .finally(() => setLoading(false));
+        if (!cancelled) setError(msg);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    run();
+    return () => { cancelled = true; };
   }, [id]);
+
+  const submitReview = async (e) => {
+    e.preventDefault();
+    setReviewStatus(null);
+
+    if (!user) {
+      setReviewStatus({ type: 'error', message: 'Please login to add a review.' });
+      return;
+    }
+
+    try {
+      await trekApi.addReview(id, { rating: reviewRating, comment: reviewComment });
+      setReviewComment('');
+      setReviewRating(5);
+      setReviewStatus({ type: 'success', message: 'Review added.' });
+      loadReviews(id);
+    } catch (err) {
+      const msg = err.response?.data?.error || 'Failed to add review';
+      setReviewStatus({ type: 'error', message: msg });
+    }
+  };
 
   if (loading) return <div className="trek-details-container"><p className="trek-details-status">Loading trek...</p></div>;
   if (error)   return <div className="trek-details-container"><p className="trek-details-status error">{error}</p></div>;
@@ -129,6 +175,74 @@ const TrekDetails = () => {
               <div className="trek-details-map">
                 <MapView center={[trek.lon, trek.lat]} />
               </div>
+            </section>
+
+            {/* Reviews */}
+            <section className="trek-details-section reviews-section">
+              <h2 className="section-title">Reviews</h2>
+
+              <div className="reviews-meta">
+                <span className="reviews-meta__rating">
+                  <Star size={16} /> {trek.rating} <span className="reviews-meta__count">({trek.reviewCount} reviews)</span>
+                </span>
+              </div>
+
+              {reviews.length === 0 ? (
+                <p className="reviews-empty">No reviews yet. Be the first to review this trek.</p>
+              ) : (
+                <div className="reviews-list">
+                  {reviews.map((r) => (
+                    <div key={r._id} className="review-card">
+                      <div className="review-card__top">
+                        <strong className="review-card__user">{r.username || 'User'}</strong>
+                        <span className="review-card__rating">
+                          <Star size={14} /> {r.rating}
+                        </span>
+                      </div>
+                      {r.comment && <p className="review-card__comment">{r.comment}</p>}
+                      {r.createdAt && (
+                        <div className="review-card__date">
+                          {new Date(r.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <form className="review-form" onSubmit={submitReview}>
+                <h3 className="review-form__title">Add a Review</h3>
+
+                {reviewStatus && (
+                  <div className={`review-form__status ${reviewStatus.type === 'error' ? 'is-error' : 'is-success'}`}>
+                    {reviewStatus.message}
+                  </div>
+                )}
+
+                <label className="review-form__label">Rating</label>
+                <select
+                  className="review-form__input"
+                  value={reviewRating}
+                  onChange={(e) => setReviewRating(Number(e.target.value))}
+                >
+                  {[5, 4, 3, 2, 1].map(v => (
+                    <option key={v} value={v}>{v}</option>
+                  ))}
+                </select>
+
+                <label className="review-form__label">Comment</label>
+                <textarea
+                  className="review-form__input review-form__textarea"
+                  value={reviewComment}
+                  onChange={(e) => setReviewComment(e.target.value)}
+                  placeholder="Share your experience..."
+                  rows={3}
+                />
+
+                <button className="review-form__btn" type="submit">
+                  Submit Review
+                </button>
+              </form>
             </section>
           </div>
 

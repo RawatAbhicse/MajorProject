@@ -79,7 +79,7 @@ const TrekCard = ({ trek }) => {
           <span className="price-subtext">per person</span>
         </div>
       </div>
-
+      
       <div className="trek-content">
         <div className="trek-header">
           <h3 className="trek-title">{name}</h3>
