@@ -34,7 +34,7 @@ app.get('/api', (req, res) => {
   res.json({ message: 'Welcome to the Trekking App API!' });
 });
 app.use('/api/treks', trekRoutes);
-app.use('/api/guides',auth, guideRoutes);
+app.use('/api/guides', guideRoutes);
 app.use('/api/weather',auth, weatherRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', auth, userRoutes);

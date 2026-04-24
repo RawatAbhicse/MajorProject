@@ -10,6 +10,7 @@ import ItineraryPlanner from './pages/ItineraryPlanner';
 import BudgetTracker from './pages/BudgetTracker';
 import GuideList from './pages/GuideList';
 import GuideDetails from './pages/GuideDetails';
+import GuideRegistration from './pages/GuideRegistration';
 import UserProfile from './pages/UserProfile';
 import Booking from './pages/Booking';
 import FriendsChat from './pages/FriendsChat';
@@ -43,6 +44,7 @@ function App() {
             <Route path="/trek/:id" element={<ProtectedRoute><TrekDetails /></ProtectedRoute>} />
             <Route path="/guides" element={<ProtectedRoute><GuideList /></ProtectedRoute>} />
             <Route path="/guides/:id" element={<ProtectedRoute><GuideDetails /></ProtectedRoute>} />
+            <Route path="/register-guide" element={<ProtectedRoute><GuideRegistration /></ProtectedRoute>} />
             <Route path="/planner" element={<ProtectedRoute><ItineraryPlanner /></ProtectedRoute>} />
             <Route path="/budget" element={<ProtectedRoute><BudgetTracker /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />

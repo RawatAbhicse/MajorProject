@@ -2,18 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Star, MapPin, Phone, Mail, CheckCircle, XCircle,
-  Award, Globe, Briefcase, ArrowLeft, Users
+  Award, Globe, Briefcase, ArrowLeft, Users, Trash2, RotateCcw, AlertCircle
 } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
 import { guideApi } from '../services/api';
 import '../styles/GuideDetails.css';
 
 const GuideDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const [guide, setGuide]   = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError]   = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [actionMessage, setActionMessage] = useState('');
+  const [actionType, setActionType] = useState(''); // 'success' or 'error'
 
   useEffect(() => {
     guideApi.getById(id)
@@ -21,6 +27,61 @@ const GuideDetails = () => {
       .catch(() => setError('Failed to load guide profile.'))
       .finally(() => setLoading(false));
   }, [id]);
+
+  const isOwnGuide = user && guide && (
+    guide.userId === user.id || 
+    guide.userId === user._id ||
+    guide.userId?._id === user.id ||
+    String(guide.userId) === String(user.id)
+  );
+
+  const handleDelete = async () => {
+    setDeleteLoading(true);
+    try {
+      console.log('Attempting to delete guide:', id);
+      const response = await guideApi.delete(id);
+      console.log('Delete response:', response);
+      setActionMessage('Guide profile deleted successfully! Redirecting...');
+      setActionType('success');
+      setTimeout(() => {
+        navigate('/guides');
+      }, 2000);
+    } catch (err) {
+      console.error('Delete error:', err);
+      const errMsg = err.response?.data?.error || err.message || 'Failed to delete guide profile';
+      setActionMessage(errMsg);
+      setActionType('error');
+    } finally {
+      setDeleteLoading(false);
+      setShowDeleteModal(false);
+    }
+  };
+
+  const handleRestore = async () => {
+    setDeleteLoading(true);
+    try {
+      console.log('Attempting to restore guide:', id);
+      const response = await guideApi.restore(id);
+      console.log('Restore response:', response);
+      if (response.data && response.data.guide) {
+        setGuide(response.data.guide);
+        setActionMessage('Guide profile restored successfully!');
+        setActionType('success');
+        setTimeout(() => {
+          setActionMessage('');
+        }, 3000);
+      } else {
+        throw new Error('Invalid response structure');
+      }
+    } catch (err) {
+      console.error('Restore error:', err);
+      const errMsg = err.response?.data?.error || err.message || 'Failed to restore guide profile';
+      setActionMessage(errMsg);
+      setActionType('error');
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
 
   if (loading) return <div className="gd-container"><p className="gd-status">Loading guide profile…</p></div>;
   if (error)   return <div className="gd-container"><p className="gd-status gd-error">{error}</p></div>;
@@ -39,6 +100,14 @@ const GuideDetails = () => {
         <button className="gd-back" onClick={() => navigate('/guides')}>
           <ArrowLeft size={16} /> Back to Guides
         </button>
+
+        {/* Action Messages */}
+        {actionMessage && (
+          <div className={`action-alert action-${actionType}`}>
+            {actionType === 'success' ? <CheckCircle size={18} /> : <AlertCircle size={18} />}
+            <span>{actionMessage}</span>
+          </div>
+        )}
 
         {/* Hero */}
         <div className="gd-hero">
@@ -63,6 +132,11 @@ const GuideDetails = () => {
             {isAvailable ? <CheckCircle size={14} /> : <XCircle size={14} />}
             {guide.availability}
           </div>
+          {!guide.isActive && (
+            <div className="gd-deleted-badge">
+              <XCircle size={14} /> Deactivated
+            </div>
+          )}
         </div>
 
         {/* Stats Strip */}
@@ -147,11 +221,62 @@ const GuideDetails = () => {
                 {isAvailable ? <CheckCircle size={15} /> : <XCircle size={15} />}
                 {guide.availability}
               </div>
+
+              {/* Owner Actions */}
+              {isOwnGuide && (
+                <div className="gd-owner-actions">
+                  {guide.isActive ? (
+                    <button
+                      className="gd-action-btn gd-btn-delete"
+                      onClick={() => setShowDeleteModal(true)}
+                      disabled={deleteLoading}
+                    >
+                      <Trash2 size={16} /> Delete Profile
+                    </button>
+                  ) : (
+                    <button
+                      className="gd-action-btn gd-btn-restore"
+                      onClick={handleRestore}
+                      disabled={deleteLoading}
+                    >
+                      <RotateCcw size={16} /> Restore Profile
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           </aside>
         </div>
 
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="modal-overlay" onClick={() => setShowDeleteModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <h3 className="modal-title">Delete Guide Profile?</h3>
+            <p className="modal-message">
+              Are you sure you want to delete your guide profile? You can restore it later.
+            </p>
+            <div className="modal-actions">
+              <button
+                className="modal-btn modal-btn-cancel"
+                onClick={() => setShowDeleteModal(false)}
+                disabled={deleteLoading}
+              >
+                Cancel
+              </button>
+              <button
+                className="modal-btn modal-btn-delete"
+                onClick={handleDelete}
+                disabled={deleteLoading}
+              >
+                {deleteLoading ? 'Deleting...' : 'Delete Profile'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

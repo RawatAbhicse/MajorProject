@@ -16,6 +16,7 @@ const FriendsChat = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [chatError, setChatError] = useState('');
+  const [searchError, setSearchError] = useState('');
   const [unreadByFriend, setUnreadByFriend] = useState({});
   const [showCreateGroup, setShowCreateGroup] = useState(false);
   const [groupName, setGroupName] = useState('');
@@ -81,7 +82,6 @@ const FriendsChat = () => {
   useEffect(() => {
     fetchFriends();
     fetchRequests();
-    searchUsers('');
   }, []);
 
   useEffect(() => {
@@ -181,6 +181,7 @@ const FriendsChat = () => {
       setFriends(res.data);
     } catch (error) {
       console.error(error);
+      if (error.response?.status === 401) setChatError('Session expired. Please log in again.');
     }
   };
 
@@ -224,24 +225,22 @@ const FriendsChat = () => {
   };
 
   const searchUsers = async (query) => {
-    if (query.length === 0) {
-      try {
-        const res = await api.get('/users/search');
-        setSearchResults(res.data);
-      } catch (error) {
-        console.error(error);
-      }
-      return;
-    }
+    setSearchError('');
     if (query.length < 2) {
       setSearchResults([]);
       return;
     }
     try {
-      const res = await api.get(`/users/search?q=${query}`);
+      const res = await api.get(`/users/search?q=${encodeURIComponent(query)}`);
       setSearchResults(res.data);
     } catch (error) {
       console.error(error);
+      setSearchResults([]);
+      setSearchError(
+        error.response?.status === 401
+          ? 'Session expired. Please log in again.'
+          : 'Search failed. Please try again.'
+      );
     }
   };
 
@@ -403,7 +402,8 @@ const FriendsChat = () => {
                 searchUsers(e.target.value);
               }}
             />
-            {searchResults.length === 0 && (
+            {searchError && <p className="search-hint" style={{ color: '#b8324b' }}>{searchError}</p>}
+            {!searchError && searchResults.length === 0 && (
               <p className="search-hint">
                 {searchQuery.length < 2 ? 'Type at least 2 characters to search.' : 'No users found.'}
               </p>
@@ -486,10 +486,14 @@ const FriendsChat = () => {
             />
             <p className="group-modal-subtitle">Select friends to add:</p>
             <div className="group-members-list">
-              {friends.map((friend) => {
+              {friends.length === 0 ? (
+                <p style={{ color: '#6d78a5', fontSize: '0.88rem', textAlign: 'center', padding: '12px 4px', margin: 0 }}>
+                  No friends yet. Go to <strong>Find Users</strong> tab to add friends first.
+                </p>
+              ) : friends.map((friend) => {
                 const friendId = getFriendId(friend);
                 return (
-                  <label key={friendId} className="group-member-item">
+                  <label key={friendId} className="group-member-item" style={{ cursor: 'pointer' }}>
                     <input
                       type="checkbox"
                       checked={selectedGroupMembers.includes(friendId)}
