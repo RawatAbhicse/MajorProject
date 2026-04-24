@@ -48,6 +48,7 @@ export const guideApi = {
   create: (data) => api.post('/guides', data),
   update: (id, data) => api.put(`/guides/${id}`, data),
   delete: (id) => api.delete(`/guides/${id}`),
+  restore: (id) => api.post(`/guides/${id}/restore`, {}),
 };
 
 // Weather helper

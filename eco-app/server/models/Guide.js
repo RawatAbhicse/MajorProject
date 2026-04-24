@@ -15,6 +15,9 @@ const guideSchema = new Schema({
   availability: { type: String, default: 'Available' },
   totalTrips: { type: Number, default: 0 },
   certifications: { type: [String], default: [] },
+  userId: { type: Schema.Types.ObjectId, ref: 'User' },
+  isActive: { type: Boolean, default: true },
+  deletedAt: { type: Date, default: null },
 }, { timestamps: true });
 
 export default model('Guide', guideSchema);

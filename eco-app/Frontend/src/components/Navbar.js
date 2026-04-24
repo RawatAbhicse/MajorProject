@@ -110,6 +110,9 @@ const Navbar = () => {
                   <Link to="/profile" className="nb__dropdown-item" onClick={() => setProfileOpen(false)}>
                     <User size={15} /> My Profile
                   </Link>
+                  <Link to="/register-guide" className="nb__dropdown-item" onClick={() => setProfileOpen(false)}>
+                    <Users size={15} /> Become a Guide
+                  </Link>
                   <button className="nb__dropdown-item nb__dropdown-item--danger" onClick={handleLogout}>
                     <LogOut size={15} /> Sign Out
                   </button>

@@ -16,8 +16,8 @@ router.post('/request', auth, async (req, res) => {
 
     if (toUserId === req.user.id) return res.status(400).json({ error: 'Cannot send request to yourself' });
 
-    // Check if already friends
-    if (req.user.friends.includes(toUserId)) return res.status(400).json({ error: 'Already friends' });
+    // Check if already friends (compare as strings since req.user.friends contains ObjectIds)
+    if (req.user.friends.some(f => String(f) === String(toUserId))) return res.status(400).json({ error: 'Already friends' });
 
     // Check if request already exists
     const existing = await FriendRequest.findOne({
