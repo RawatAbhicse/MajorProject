@@ -1,167 +1,296 @@
-import React, { useState, useEffect } from 'react';
-import { Cloud, Sun, CloudRain, Wind, Thermometer, Eye, Droplets } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Search, MapPin } from 'lucide-react';
+import api from '../services/api';
 import '../styles/WeatherWidget.css';
 
-const WeatherWidget = ({ location = 'Dehradun', compact = false }) => {
+const DEFAULT_COORDINATES = {
+  Dehradun: { lat: 30.3165, lon: 78.0322 }
+};
+
+const buildWeatherModel = (current, forecast, fallbackLabel) => ({
+  location: current.name || fallbackLabel,
+  current: {
+    temperature: Math.round(current.main.temp),
+    description: current.weather[0].description,
+    condition: current.weather[0].main,
+    humidity: current.main.humidity,
+    wind: current.wind.speed,
+    visibility: current.visibility / 1000
+  },
+  forecast: buildForecast(forecast.list)
+});
+
+const buildForecast = (list) => {
+  const dailyMap = {};
+
+  list.forEach((item) => {
+    const date = new Date(item.dt * 1000);
+    const key = date.toDateString();
+
+    if (!dailyMap[key]) {
+      dailyMap[key] = {
+        temps: [],
+        precipitation: 0,
+        condition: item.weather[0].main
+      };
+    }
+
+    dailyMap[key].temps.push(item.main.temp);
+
+    // rain probability (if exists)
+    if (item.pop) {
+      dailyMap[key].precipitation = Math.max(
+        dailyMap[key].precipitation,
+        Math.round(item.pop * 100)
+      );
+    }
+  });
+
+  const days = Object.keys(dailyMap).slice(0, 5);
+
+  return days.map((date, index) => {
+    const dayData = dailyMap[date];
+    const temps = dayData.temps;
+
+    return {
+      day:
+        index === 0
+          ? "Today"
+          : index === 1
+            ? "Tomorrow"
+            : new Date(date).toLocaleDateString("en-US", { weekday: "short" }),
+
+      high: Math.round(Math.max(...temps)),
+      low: Math.round(Math.min(...temps)),
+      condition: mapCondition(dayData.condition),
+      precipitation: dayData.precipitation
+    };
+  });
+};
+const mapCondition = (condition) => {
+  switch (condition.toLowerCase()) {
+    case "clear":
+      return "sunny";
+    case "clouds":
+      return "partly-cloudy";
+    case "rain":
+      return "rainy";
+    default:
+      return "cloudy";
+  }
+};
+const getWeatherIcon = (condition, className = "") => {
+  switch (condition?.toLowerCase()) {
+    case "clear":
+      return <span className={className}>☀️</span>;
+    case "clouds":
+      return <span className={className}>☁️</span>;
+    case "rain":
+      return <span className={className}>🌧️</span>;
+    default:
+      return <span className={className}>🌤️</span>;
+  }
+};
+const WeatherWidget = ({ location: initialLocation = 'Dehradun', compact = false }) => {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [forecast, setForecast] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isUsingCurrentLocation, setIsUsingCurrentLocation] = useState(true);
 
+  // Fetch Weather (handles both city & coords)
+  const fetchWeather = useCallback(async (params) => {
+    setLoading(true);
+    try {
+      const [currentRes, forecastRes] = await Promise.all([
+        api.get('/weather', { params }),
+        api.get('/weather/forecast', { params })
+      ]);
+
+      const fallbackLabel = params.q || 'Current Location';
+
+      setWeather(
+        buildWeatherModel(
+          currentRes.data,
+          forecastRes.data,
+          fallbackLabel
+        )
+      );
+    } catch (error) {
+      console.error('Failed to fetch weather:', error);
+      alert('Location not found. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Initial Load → User Location → Fallback
   useEffect(() => {
-    const fetchWeather = async () => {
-      setLoading(true);
-      setTimeout(() => {
-        const mockWeather = {
-          location: location,
-          current: {
-            temperature: 22,
-            condition: 'partly-cloudy',
-            description: 'Partly Cloudy',
-            humidity: 68,
-            windSpeed: 12,
-            visibility: 10,
-            uvIndex: 6,
-            pressure: 1013
+    const getInitialLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            setIsUsingCurrentLocation(true);
+            fetchWeather({
+              lat: pos.coords.latitude,
+              lon: pos.coords.longitude
+            });
           },
-          forecast: [
-            { day: 'Today', high: 25, low: 18, condition: 'partly-cloudy', precipitation: 20 },
-            { day: 'Tomorrow', high: 23, low: 16, condition: 'cloudy', precipitation: 40 },
-            { day: 'Wed', high: 28, low: 20, condition: 'sunny', precipitation: 10 },
-            { day: 'Thu', high: 26, low: 19, condition: 'rainy', precipitation: 80 },
-            { day: 'Fri', high: 24, low: 17, condition: 'partly-cloudy', precipitation: 30 }
-          ]
-        };
-        setWeather(mockWeather);
-        setForecast(mockWeather.forecast);
-        setLoading(false);
-      }, 1000);
-    };
-    fetchWeather();
-  }, [location]);
+          () => {
+            const fallback =
+              DEFAULT_COORDINATES[initialLocation] ||
+              DEFAULT_COORDINATES.Dehradun;
 
-  const getWeatherIcon = (condition) => {
-    const icons = {
-      sunny: <Sun className="w-6 h-6 text-yellow-400" />,
-      'partly-cloudy': <Cloud className="w-6 h-6 text-gray-400" />,
-      cloudy: <Cloud className="w-6 h-6 text-gray-500" />,
-      rainy: <CloudRain className="w-6 h-6 text-blue-400" />
+            setIsUsingCurrentLocation(false);
+            fetchWeather({
+              lat: fallback.lat,
+              lon: fallback.lon
+            });
+          }
+        );
+      }
     };
-    return icons[condition] || icons['sunny'];
+
+    getInitialLocation();
+  }, [fetchWeather, initialLocation]);
+
+  // Search City
+  const handleSearch = async (e) => {
+    e.preventDefault();
+
+    const city = searchQuery.trim();
+    if (!city) return;
+
+    try {
+      setLoading(true);
+
+      // 1️⃣ Get coordinates from backend
+      const geoRes = await api.get('/weather/geo', {
+        params: { q: city }
+      });
+
+      const { lat, lon, name } = geoRes.data;
+
+      // 2️⃣ Fetch weather using lat/lon
+      await fetchWeather({ lat, lon });
+
+      setIsUsingCurrentLocation(false);
+      setSearchQuery('');
+
+    } catch (error) {
+      console.error(error);
+      alert("Location not found");
+    } finally {
+      setLoading(false);
+    }
+  };
+  // Use Current Location
+  const handleGetLocation = () => {
+    navigator.geolocation.getCurrentPosition((pos) => {
+      setIsUsingCurrentLocation(true);
+      fetchWeather({
+        lat: pos.coords.latitude,
+        lon: pos.coords.longitude
+      });
+    });
   };
 
-  const getSmallWeatherIcon = (condition) => {
-    const icons = {
-      sunny: <Sun className="w-4 h-4 text-yellow-400" />,
-      'partly-cloudy': <Cloud className="w-4 h-4 text-gray-400" />,
-      cloudy: <Cloud className="w-4 h-4 text-gray-500" />,
-      rainy: <CloudRain className="w-4 h-4 text-blue-400" />
-    };
-    return icons[condition] || icons['sunny'];
-  };
-
-  if (loading) {
+  if (loading && !weather) {
     return (
-      <div className={`weather-widget weather-loading ${compact ? 'weather-compact' : ''}`}>
-        <div className="loading-pulse">
-          <div className="loading-bar1"></div>
-          <div className="loading-bar2"></div>
-          <div className="loading-bar3"></div>
-        </div>
-      </div>
-    );
-  }
-
-  if (compact) {
-    return (
-      <div className="weather-widget weather-compact">
-        <div className="weather-compact-content">
-          <div>
-            <p className="weather-compact-location">{weather.location}</p>
-            <div className="weather-compact-main">
-              {getWeatherIcon(weather.current.condition)}
-              <span className="weather-compact-temperature">
-                {weather.current.temperature}°C
-              </span>
-            </div>
-          </div>
-          <div className="weather-compact-info">
-            <p className="weather-compact-description">{weather.current.description}</p>
-            <p className="weather-compact-range">
-              H: {forecast[0]?.high}° L: {forecast[0]?.low}°
-            </p>
-          </div>
-        </div>
+      <div className="weather-widget loading-pulse">
+        Fetching sky data...
       </div>
     );
   }
 
   return (
-    <div className="weather-widget">
-      <div className="weather-main">
-        <div className="weather-header">
-          <div>
-            <h3 className="weather-location">{weather.location}</h3>
-            <p className="weather-description">{weather.current.description}</p>
-          </div>
-          {getWeatherIcon(weather.current.condition)}
-        </div>
-        
-        <div className="weather-temperature">
-          {weather.current.temperature}°C
-        </div>
+    <div className={`weather-widget ${compact ? 'weather-compact' : ''}`}>
 
-        <div className="weather-details">
-          <div className="weather-detail-item">
-            <Droplets className="weather-detail-icon" />
-            <span>{weather.current.humidity}%</span>
-          </div>
-          <div className="weather-detail-item">
-            <Wind className="weather-detail-icon" />
-            <span>{weather.current.windSpeed} km/h</span>
-          </div>
-          <div className="weather-detail-item">
-            <Eye className="weather-detail-icon" />
-            <span>{weather.current.visibility} km</span>
-          </div>
-        </div>
+      {/* 🔍 Search + Location */}
+      <div className="weather-search-container">
+        <form onSubmit={handleSearch} className="search-form">
+          <input
+            type="text"
+            placeholder="Search any city..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button type="submit">
+            <Search size={18} />
+          </button>
+        </form>
+
+        <button
+          className={`location-btn ${isUsingCurrentLocation ? 'active' : ''}`}
+          onClick={handleGetLocation}
+          title="Use my location"
+        >
+          <MapPin size={18} />
+        </button>
       </div>
 
-      <div className="forecast-section">
-        <h4 className="forecast-title">5-Day Forecast</h4>
-        <div className="forecast-list">
-          {forecast.map((day, index) => (
-            <div key={index} className="forecast-item">
-              <div className="forecast-day-container">
-                {getSmallWeatherIcon(day.condition)}
-                <span className="forecast-day">{day.day}</span>
-              </div>
-              <div className="forecast-details">
-                <div className="forecast-precipitation">
-                  <Droplets className="precipitation-icon" />
-                  <span>{day.precipitation}%</span>
-                </div>
-                <div className="forecast-temperatures">
-                  <Thermometer className='precipitation-icon'/>
-                  <span>{day.high}°</span>
-                  <span className="forecast-low">{day.low}°</span>
-                </div>
-              </div>
+      {/* 📍 Status */}
+      <p className="location-status">
+        {isUsingCurrentLocation
+          ? '📍 Using your current location'
+          : '🔎 Showing searched location'}
+      </p>
+      <div className="weather-details">
+  <div>💧 {weather.current.humidity}%</div>
+  <div>💨 {weather.current.wind} km/h</div>
+  <div>👁️ {weather.current.visibility} km</div>
+</div>
+      {/* Weather Content */}
+      {weather && (
+        <>
+          <div className="weather-header">
+            <div>
+              <h3 className="weather-location">{weather.location}</h3>
+              <p className="weather-description">
+                {weather.current.description}
+              </p>
             </div>
-          ))}
-        </div>
-      </div>
 
-      <div className="weather-alert">
-        <div className="alert-content">
-          <div className="alert-indicator"></div>
-          <div>
-            <p className="alert-title">Weather Advisory</p>
-            <p className="alert-description">
-              Afternoon showers expected. Carry rain gear for outdoor activities.
-            </p>
+            <div className="weather-temp-main">
+              {getWeatherIcon(weather.current.condition, "w-10 h-10")}
+              <span className="temp-value">
+                {weather.current.temperature}°C
+              </span>
+            </div>
           </div>
-        </div>
-      </div>
+          <div className="forecast-section">
+            <h4 className="forecast-title">5-Day Forecast</h4>
+
+            <div className="forecast-list">
+              {weather.forecast.map((day, i) => (
+                <div key={i} className="forecast-item">
+                  <div className="forecast-left">
+                    {getWeatherIcon(day.condition)}
+                    <span>{day.day}</span>
+                  </div>
+
+                  <div className="forecast-right">
+                    <span className="rain">{day.precipitation}%</span>
+                    <span className="temp">
+                      {day.high}° <span className="low">{day.low}°</span>
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Optional Reset Button */}
+          {!isUsingCurrentLocation && (
+            <button
+              className="reset-location"
+              onClick={handleGetLocation}
+            >
+              Use My Location
+            </button>
+          )}
+
+          {/* Keep your existing forecast + stats UI below */}
+        </>
+      )}
     </div>
   );
 };
