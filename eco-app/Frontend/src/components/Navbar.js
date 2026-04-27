@@ -63,7 +63,7 @@ const Navbar = () => {
           <div className="nb__logo-icon">
             <Mountain size={20} />
           </div>
-          <span className="nb__logo-text">EcoTrek</span>
+          <span className="nb__logo-text">EcoTracer</span>
         </Link>
 
         {/* Desktop Links */}
