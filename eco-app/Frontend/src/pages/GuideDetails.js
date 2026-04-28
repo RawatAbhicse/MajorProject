@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Star, MapPin, Phone, Mail, CheckCircle, XCircle,
-  Award, Globe, Briefcase, ArrowLeft, Users, Trash2, RotateCcw, AlertCircle
+  Award, Globe, Briefcase, ArrowLeft, Users, Trash2, RotateCcw, AlertCircle, MessageCircle
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { guideApi } from '../services/api';
+import { guideApi, chatApi } from '../services/api';
 import '../styles/GuideDetails.css';
 
 const GuideDetails = () => {
@@ -17,6 +17,7 @@ const GuideDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError]   = useState(null);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const [chatLoading, setChatLoading] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [actionMessage, setActionMessage] = useState('');
   const [actionType, setActionType] = useState(''); // 'success' or 'error'
@@ -80,6 +81,20 @@ const GuideDetails = () => {
       setActionType('error');
     } finally {
       setDeleteLoading(false);
+    }
+  };
+
+  const handleStartChat = async () => {
+    setChatLoading(true);
+    try {
+      const response = await chatApi.getOrCreate(id, null);
+      navigate(`/chat/${response.data._id}`);
+    } catch (err) {
+      console.error('Error starting chat:', err);
+      setActionMessage('Failed to start chat. Please try again.');
+      setActionType('error');
+    } finally {
+      setChatLoading(false);
     }
   };
 
@@ -216,6 +231,16 @@ const GuideDetails = () => {
               <a href={`mailto:${guide.email}`} className="gd-contact-btn gd-btn-email">
                 <Mail size={16} /> {guide.email}
               </a>
+
+              {!isOwnGuide && (
+                <button
+                  className="gd-contact-btn gd-btn-chat"
+                  onClick={handleStartChat}
+                  disabled={chatLoading}
+                >
+                  <MessageCircle size={16} /> {chatLoading ? 'Starting...' : 'Start Chat'}
+                </button>
+              )}
 
               <div className={`gd-avail-status ${isAvailable ? 'avail' : 'busy'}`}>
                 {isAvailable ? <CheckCircle size={15} /> : <XCircle size={15} />}

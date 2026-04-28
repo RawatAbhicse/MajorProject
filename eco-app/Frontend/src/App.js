@@ -13,17 +13,19 @@ import GuideDetails from './pages/GuideDetails';
 import GuideRegistration from './pages/GuideRegistration';
 import UserProfile from './pages/UserProfile';
 import Booking from './pages/Booking';
+import MyBookings from './pages/MyBookings';
+import BookingDetails from './pages/BookingDetails';
 import FriendsChat from './pages/FriendsChat';
+import Messages from './pages/Messages';
+import GuideChat from './pages/GuideChat';
 import './App.css';
 
-// Redirect logged-in users away from login page
 const PublicRoute = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   return user ? <Navigate to="/home" replace /> : children;
 };
 
-// Redirect guests to login
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
@@ -37,19 +39,24 @@ function App() {
         <Navbar />
         <main className="app-main">
           <Routes>
-            <Route path="/" element={<PublicRoute><Login /></PublicRoute>} />
-            <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
-            <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-            <Route path="/treks" element={<ProtectedRoute><TrekList /></ProtectedRoute>} />
-            <Route path="/trek/:id" element={<ProtectedRoute><TrekDetails /></ProtectedRoute>} />
-            <Route path="/guides" element={<ProtectedRoute><GuideList /></ProtectedRoute>} />
-            <Route path="/guides/:id" element={<ProtectedRoute><GuideDetails /></ProtectedRoute>} />
-            <Route path="/register-guide" element={<ProtectedRoute><GuideRegistration /></ProtectedRoute>} />
-            <Route path="/planner" element={<ProtectedRoute><ItineraryPlanner /></ProtectedRoute>} />
-            <Route path="/budget" element={<ProtectedRoute><BudgetTracker /></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
-            <Route path="/booking/:id" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
-            <Route path="/friends" element={<ProtectedRoute><FriendsChat /></ProtectedRoute>} />
+            <Route path="/"                element={<PublicRoute><Login /></PublicRoute>} />
+            <Route path="/login"           element={<PublicRoute><Login /></PublicRoute>} />
+            <Route path="/home"            element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            <Route path="/treks"           element={<ProtectedRoute><TrekList /></ProtectedRoute>} />
+            <Route path="/trek/:id"        element={<ProtectedRoute><TrekDetails /></ProtectedRoute>} />
+            <Route path="/guides"          element={<ProtectedRoute><GuideList /></ProtectedRoute>} />
+            <Route path="/guides/:id"      element={<ProtectedRoute><GuideDetails /></ProtectedRoute>} />
+            <Route path="/register-guide"  element={<ProtectedRoute><GuideRegistration /></ProtectedRoute>} />
+            <Route path="/planner"         element={<ProtectedRoute><ItineraryPlanner /></ProtectedRoute>} />
+            <Route path="/budget"          element={<ProtectedRoute><BudgetTracker /></ProtectedRoute>} />
+            <Route path="/profile"         element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+            <Route path="/booking/:id"     element={<ProtectedRoute><Booking /></ProtectedRoute>} />
+            <Route path="/my-bookings"     element={<ProtectedRoute><MyBookings /></ProtectedRoute>} />
+            <Route path="/bookings/:id"    element={<ProtectedRoute><BookingDetails /></ProtectedRoute>} />
+            <Route path="/friends"         element={<ProtectedRoute><FriendsChat /></ProtectedRoute>} />
+            <Route path="/messages"        element={<ProtectedRoute><Messages /></ProtectedRoute>} />
+            <Route path="/chat/:chatId"    element={<ProtectedRoute><GuideChat /></ProtectedRoute>} />
+            <Route path="/chat/guide/:guideId" element={<ProtectedRoute><GuideChat /></ProtectedRoute>} />
           </Routes>
         </main>
       </div>

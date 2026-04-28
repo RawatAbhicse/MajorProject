@@ -1,0 +1,188 @@
+.mb-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 40px 24px 64px;
+}
+
+.mb-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 64px);
+  gap: 12px;
+  color: #475569;
+  font-size: 1rem;
+}
+.mb-state--error { color: #ef4444; }
+.mb-spin { animation: mbSpin 0.8s linear infinite; }
+@keyframes mbSpin { to { transform: rotate(360deg); } }
+
+.mb-header { margin-bottom: 32px; }
+.mb-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+.mb-sub { font-size: 0.875rem; color: #64748b; }
+
+/* ── Empty state ── */
+.mb-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  text-align: center;
+  color: #94a3b8;
+  gap: 12px;
+}
+.mb-empty svg { color: #cbd5e1; }
+.mb-empty h2 { font-size: 1.2rem; font-weight: 700; color: #475569; }
+.mb-empty p  { font-size: 0.9rem; color: #94a3b8; }
+.mb-browse-btn {
+  margin-top: 8px;
+  padding: 10px 24px;
+  background: #10b981;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.mb-browse-btn:hover { background: #059669; }
+
+/* ── Booking card list ── */
+.mb-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mb-card {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.15s, transform 0.1s;
+}
+.mb-card:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.09);
+  transform: translateY(-2px);
+}
+
+.mb-card-img-wrap {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  min-height: 140px;
+}
+.mb-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.mb-diff-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+}
+
+.mb-card-body {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mb-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+.mb-trek-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+.mb-trek-loc {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.mb-status-badge {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  border: 1px solid;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.mb-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 0.78rem;
+  color: #475569;
+}
+.mb-card-meta span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.mb-guide-line {
+  font-size: 0.82rem;
+  color: #64748b;
+}
+.mb-guide-line strong { color: #1e293b; }
+
+.mb-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid #f1f5f9;
+}
+.mb-total {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #10b981;
+}
+.mb-view-link {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #10b981;
+}
+
+@media (max-width: 600px) {
+  .mb-card { grid-template-columns: 1fr; }
+  .mb-card-img-wrap { height: 160px; min-height: unset; }
+  .mb-page { padding: 24px 16px 48px; }
+  .mb-title { font-size: 1.4rem; }
+}
