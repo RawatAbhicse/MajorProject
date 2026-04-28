@@ -16,7 +16,10 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.0",
     "multer": "^2.1.1",
+<<<<<<< HEAD
     "mutter": "^1.0.1",
+=======
+>>>>>>> aff06a5 (feat: Booking + chat functioanlity)
     "razorpay": "^2.9.6"
   },
   "devDependencies": {
