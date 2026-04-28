@@ -76,7 +76,7 @@ const Home = () => {
                 <Search className="search-icon" />
                 <input
                   type="text"
-                  placeholder="Search treks, destinations..."
+                  placeholder="       Search treks, destinations..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="search-input"
