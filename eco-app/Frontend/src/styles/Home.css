@@ -73,13 +73,6 @@
   flex-shrink: 0;
 }
 
-.search-form button {
-  white-space: nowrap;
-  padding: 0.75rem 1.5rem;
-  height: fit-content;
-  flex-shrink: 0;
-}
-
 .search-container {
   display: flex;
   flex-direction: row;
