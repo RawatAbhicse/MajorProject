@@ -51,6 +51,27 @@ export const guideApi = {
   restore: (id) => api.post(`/guides/${id}/restore`, {}),
 };
 
+// Chat endpoints
+export const chatApi = {
+  getAll: () => api.get('/chats'),
+  getById: (id) => api.get(`/chats/${id}`),
+  getOrCreate: (guideId, trekId = null) => api.post(`/chats/get-or-create/${guideId}`, { trekId }),
+  sendMessage: (chatId, content) => api.post(`/chats/${chatId}/message`, { content }),
+  sendAudio: (chatId, formData) => api.post(`/chats/${chatId}/audio`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
+  markAsRead: (chatId) => api.put(`/chats/${chatId}/read`, {}),
+  delete: (chatId) => api.delete(`/chats/${chatId}`),
+};
+
+// Booking endpoints
+export const bookingApi = {
+  createOrder:   (data) => api.post('/bookings/create-order', data),
+  verifyPayment: (data) => api.post('/bookings/verify-payment', data),
+  getAll:        ()     => api.get('/bookings'),
+  getById:       (id)   => api.get(`/bookings/${id}`),
+};
+
 // Weather helper
 export const getWeather = async (lat, lon) => {
   try {

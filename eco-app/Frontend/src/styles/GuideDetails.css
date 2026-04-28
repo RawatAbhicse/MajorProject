@@ -225,6 +225,7 @@
 
 .gd-btn-phone { background: #ecfdf5; color: #065f46; }
 .gd-btn-email { background: #eff6ff; color: #1e40af; }
+.gd-btn-chat { background: #f0fdf4; color: #10b981; }
 
 .gd-avail-status {
   display: flex;

@@ -66,10 +66,18 @@
   justify-content: center;
 }
 
+.search-form button {
+  white-space: nowrap;
+  padding: 0.75rem 1.5rem;
+  height: fit-content;
+  flex-shrink: 0;
+}
+
 .search-container {
   display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
   background-color: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(8px);
   border-radius: 0.75rem;
@@ -80,6 +88,7 @@
 .search-input-container {
   flex: 1;
   position: relative;
+  min-width: 200px;
 }
 
 .search-input {
@@ -373,6 +382,17 @@
   }
 }
 
+@media (max-width: 640px) {
+  .search-container {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .search-form button {
+    width: 100%;
+  }
+}
+
 @media (min-width: 640px) {
   .hero-title {
     font-size: 2.5rem;
@@ -380,10 +400,6 @@
 
   .hero-description {
     font-size: 1.25rem;
-  }
-
-  .search-container {
-    flex-direction: row;
   }
 
   .stats-grid {
