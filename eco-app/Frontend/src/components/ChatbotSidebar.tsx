@@ -1,14 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ChatMessage from "./ChatMessage";
 import "../styles/Chatbot.css";
+// Bot icon will be imported in Navbar
 
-export default function ChatbotSidebar() {
-  const [open, setOpen] = useState(false);
+interface ChatbotSidebarProps {
+  open?: boolean;
+  onClose?: () => void;
+}
+
+export default function ChatbotSidebar({ open = false, onClose }: ChatbotSidebarProps) {
+  const [isOpen, setIsOpen] = useState(open);
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState("");
   const [location, setLocation] = useState<any>(null);
+
+  // Sync with external open prop
+  useEffect(() => {
+    setIsOpen(open);
+  }, [open]);
+
+  // Handle close
+  const handleClose = () => {
+    setIsOpen(false);
+    onClose?.();
+  };
 
   // 📍 Get location
   const getLocation = () => {
@@ -27,7 +44,7 @@ export default function ChatbotSidebar() {
     const userMsg = { role: "user", content: input };
     setMessages((prev) => [...prev, userMsg]);
 
-    const res = await fetch("/api/chat", {
+    const res = await fetch("/api/ai-chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -35,6 +52,7 @@ export default function ChatbotSidebar() {
         location,
       }),
     });
+
 
     const data = await res.json();
 
@@ -48,58 +66,64 @@ export default function ChatbotSidebar() {
 
   return (
     <>
-      {/* Toggle */}
-      <button
-        className="chatbot-toggle"
-        onClick={() => setOpen(!open)}
-      >
-        💬
-      </button>
-
-      {/* Sidebar */}
-      {open && (
-        <div className="chatbot-sidebar">
-          <div className="chatbot-header">
-            Travel Assistant
-          </div>
-
-          <div className="chatbot-messages">
-            {messages.length === 0 && (
-              <div className="chatbot-empty">
-                Ask me anything about travel!
-              </div>
-            )}
-            {messages.map((msg, i) => (
-              <ChatMessage key={i} msg={msg} />
-            ))}
-          </div>
-
-          <div className="chatbot-input-area">
-            <button
-              onClick={getLocation}
-              className="chatbot-location-btn"
-            >
-              📍 Use my location
-            </button>
-
-            <div className="chatbot-input-row">
-              <input
-                className="chatbot-input"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                placeholder="Ask about travel..."
-              />
-              <button
-                onClick={sendMessage}
-                className="chatbot-send-btn"
+      {/* Sidebar (controlled by props) */}
+      {isOpen && (
+        <>
+          {/* Overlay */}
+          <div 
+            className="chatbot-overlay"
+            onClick={handleClose}
+          />
+          {/* Sidebar */}
+          <div className="chatbot-sidebar">
+            <div className="chatbot-header">
+              Travel Assistant
+              <button 
+                className="chatbot-close-btn"
+                onClick={handleClose}
               >
-                Send
+                ✕
               </button>
             </div>
+
+            <div className="chatbot-messages">
+              {messages.length === 0 && (
+                <div className="chatbot-empty">
+                  Ask me anything about travel!
+                </div>
+              )}
+              {messages.map((msg, i) => (
+                <ChatMessage key={i} msg={msg} />
+              ))}
+            </div>
+
+            <div className="chatbot-input-area">
+              <button
+                onClick={getLocation}
+                className="chatbot-location-btn"
+              >
+                📍 Use my location
+              </button>
+
+              <div className="chatbot-input-row">
+                <input
+                  className="chatbot-input"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                  placeholder="Ask about travel..."
+                />
+                <button
+                  onClick={sendMessage}
+                  className="chatbot-send-btn"
+                >
+                  Send
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </>
-  );
+   );
 }

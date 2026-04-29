@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Mountain, Menu, X, User, LogOut, Map, Home, BookOpen, DollarSign, Users, ChevronDown, MessageCircle, Package } from 'lucide-react';
+import { Mountain, Menu, X, User, LogOut, Map, Home, BookOpen, DollarSign, Users, ChevronDown, MessageCircle, Package, Bot } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import ChatbotSidebar from './ChatbotSidebar';
 import '../styles/Navbar.css';
+
 
 const navLinks = [
   { path: '/home',    label: 'Home',     icon: Home },
@@ -19,10 +21,12 @@ const Navbar = () => {
   const [scrolled,    setScrolled]    = useState(false);
   const [mobileOpen,  setMobileOpen]  = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
   const location  = useLocation();
   const navigate  = useNavigate();
   const { user, logout } = useAuth();
   const profileRef = useRef(null);
+
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -125,6 +129,18 @@ const Navbar = () => {
             <Link to="/login" className="nb__login-btn">Sign In</Link>
           )}
 
+          {/* AI Toggle */}
+          {user && (
+            <button
+              className="nb__ai-toggle"
+              onClick={() => setAiOpen(o => !o)}
+              aria-label="AI Assistant"
+            >
+              <Bot size={16} />
+              <span className="nb__ai-label">AI</span>
+            </button>
+          )}
+
           {/* Hamburger */}
           {user && (
             <button
@@ -136,6 +152,7 @@ const Navbar = () => {
             </button>
           )}
         </div>
+
       </div>
 
       {/* Mobile Menu */}
@@ -155,13 +172,25 @@ const Navbar = () => {
           <Link to="/profile" className="nb__mobile-link">
             <User size={16} /> Profile
           </Link>
+          <button 
+            className="nb__mobile-link" 
+            onClick={() => setAiOpen(true)}
+          >
+            <Bot size={16} /> AI Assistant
+          </button>
           <button className="nb__mobile-link nb__mobile-link--danger" onClick={handleLogout}>
             <LogOut size={16} /> Sign Out
           </button>
         </div>
+      )}
+
+      {/* AI Chatbot Sidebar */}
+      {user && aiOpen && (
+        <ChatbotSidebar open={aiOpen} onClose={() => setAiOpen(false)} />
       )}
     </nav>
   );
 };
 
 export default Navbar;
+
