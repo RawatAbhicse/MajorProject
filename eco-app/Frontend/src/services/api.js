@@ -53,15 +53,15 @@ export const guideApi = {
 
 // Chat endpoints
 export const chatApi = {
-  getAll: () => api.get('/chats'),
-  getById: (id) => api.get(`/chats/${id}`),
-  getOrCreate: (guideId, trekId = null) => api.post(`/chats/get-or-create/${guideId}`, { trekId }),
-  sendMessage: (chatId, content) => api.post(`/chats/${chatId}/message`, { content }),
-  sendAudio: (chatId, formData) => api.post(`/chats/${chatId}/audio`, formData, {
+  getAll: () => api.get('/chat'),
+  getById: (id) => api.get(`/chat/${id}`),
+  getOrCreate: (guideId, trekId = null) => api.post(`/chat/get-or-create/${guideId}`, { trekId }),
+  sendMessage: (chatId, content) => api.post(`/chat/${chatId}/message`, { content }),
+  sendAudio: (chatId, formData) => api.post(`/chat/${chatId}/audio`, formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
   }),
-  markAsRead: (chatId) => api.put(`/chats/${chatId}/read`, {}),
-  delete: (chatId) => api.delete(`/chats/${chatId}`),
+  markAsRead: (chatId) => api.put(`/chat/${chatId}/read`, {}),
+  delete: (chatId) => api.delete(`/chat/${chatId}`),
 };
 
 // Booking endpoints
