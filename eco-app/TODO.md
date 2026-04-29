@@ -1,20 +1,42 @@
-# ✅ Task Complete - Server Fully Fixed
+# AI Toggle in Navbar - Implementation Plan
 
-## Chat.js Fixes:
-- [x] Single clean file (user-guide messaging only)
-- [x] No duplicate imports/SyntaxError
+## Status: ✅ In Progress
 
-## index.js Improvements:
-- [x] Killed port 5000 process (PID 16276)
-- [x] Removed MongoDB deprecated options
-- [x] Fixed route mounting (weather/users/friends/bookings)
-- [x] Added /uploads static serving
-- [x] Better error handling, 404, graceful shutdown
+### Step 1: [Completed] Create TODO.md
+Created this file with implementation steps.
 
-## Test:
+### Step 2: [Completed] Update ChatbotSidebar.tsx
+- Added open/onClose props
+- Added overlay + close button
+- Synced internal state with props
+- Imported Bot icon, removed floating toggle
+- Added chatbot-overlay class
+
+### Step 3: Update Navbar.js
+- Add aiOpen state
+- Import Bot icon and ChatbotSidebar  
+- Add AI toggle button in .nb__right after profile
+- Render ChatbotSidebar conditionally
+- Add to mobile menu
+
+### Step 4: Update Navbar.css  
+- Add .nb__ai-toggle styles (mirror profile btn)
+- Ensure proper spacing/positioning
+- Style .nb__ai-indicator (optional pulse)
+
+### Step 5: Test Implementation
 ```
-cd server && npm run dev
- ```
+cd Frontend
+npm start
+```
+- Verify toggle position below profile
+- Test open/close functionality
+- Check mobile responsiveness  
+- Ensure /api/chat works
+- Fix z-index conflicts
 
-✅ Server now starts clean on port 5000 with all APIs ready.
+### Step 6: [Pending] Cleanup
+- Remove TODO.md
+- attempt_completion
+
 
