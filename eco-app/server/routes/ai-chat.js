@@ -1,5 +1,42 @@
 import express from 'express';
+import axios from 'axios';
 const router = express.Router();
+
+async function getAIResponse(message, apiKey, location) {
+  const model = process.env.OPENAI_MODEL || 'gpt-4o-mini';
+  const timeoutMs = Number(process.env.OPENAI_TIMEOUT_MS || 8000);
+
+  const system =
+    'You are a fast, helpful travel assistant for Uttarakhand (India) trekking. ' +
+    'Give concise, practical advice and include safety notes when relevant.';
+
+  const user = location
+    ? `User location context: ${location}\n\nUser message: ${message}`
+    : message;
+
+  const { data } = await axios.post(
+    'https://api.openai.com/v1/chat/completions',
+    {
+      model,
+      messages: [
+        { role: 'system', content: system },
+        { role: 'user', content: user },
+      ],
+      temperature: 0.4,
+      max_tokens: 220,
+    },
+    {
+      timeout: timeoutMs,
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+
+  const content = data?.choices?.[0]?.message?.content;
+  return typeof content === 'string' && content.trim() ? content.trim() : null;
+}
 
 
 // AI Chat endpoint for travel assistant (public - no auth needed)
@@ -24,11 +61,11 @@ router.post('/', async (req, res) => {
       reply = 'Check WeatherWidget on homepage for real-time updates. Best season May-Jun/Sept-Oct. Always carry rain gear.';
     }
 
-    // TODO: Integrate real AI with OpenAI key in .env
-    // const apiKey = process.env.OPENAI_API_KEY;
-    // if (apiKey) {
-    //   reply = await getAIResponse(message, apiKey);
-    // }
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (apiKey) {
+      const aiReply = await getAIResponse(message, apiKey, location);
+      if (aiReply) reply = aiReply;
+    }
 
     res.json({ reply });
   } catch (error) {
