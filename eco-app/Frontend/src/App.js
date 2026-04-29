@@ -19,6 +19,7 @@ import FriendsChat from './pages/FriendsChat';
 import Messages from './pages/Messages';
 import GuideChat from './pages/GuideChat';
 import './App.css';
+import ChatbotSidebar from "./components/ChatbotSidebar.tsx";
 
 const PublicRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -37,6 +38,7 @@ function App() {
     <AuthProvider>
       <div className="app-wrapper">
         <Navbar />
+        <ChatbotSidebar />
         <main className="app-main">
           <Routes>
             <Route path="/"                element={<PublicRoute><Login /></PublicRoute>} />

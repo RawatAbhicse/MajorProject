@@ -46,48 +46,7 @@ app.use('/api/weather',auth, weatherRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', auth, userRoutes);
 app.use('/api/friends', auth, friendRoutes);
-// Stream audio files with proper Range request support (before auth middleware)
-app.get('/api/chats/audio/:filename', (req, res) => {
-  const filename = path.basename(req.params.filename);
-  const filepath = path.join(__dirname, 'uploads/audio', filename);
-
-  if (!fs.existsSync(filepath)) {
-    return res.status(404).json({ error: 'File not found' });
-  }
-
-  const stat = fs.statSync(filepath);
-  const fileSize = stat.size;
-  const range = req.headers.range;
-
-  if (range) {
-    const parts = range.replace(/bytes=/, '').split('-');
-    const start = parseInt(parts[0], 10);
-    const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
-
-    if (start >= fileSize) {
-      return res.status(416).set('Content-Range', `bytes */${fileSize}`).end();
-    }
-
-    const clampedEnd = Math.min(end, fileSize - 1);
-    res.status(206).set({
-      'Content-Range': `bytes ${start}-${clampedEnd}/${fileSize}`,
-      'Accept-Ranges': 'bytes',
-      'Content-Length': clampedEnd - start + 1,
-      'Content-Type': 'audio/webm',
-    });
-    fs.createReadStream(filepath, { start, end: clampedEnd }).pipe(res);
-  } else {
-    res.set({
-      'Content-Length': fileSize,
-      'Content-Type': 'audio/webm',
-      'Accept-Ranges': 'bytes',
-    });
-    fs.createReadStream(filepath).pipe(res);
-  }
-});
-
-app.use('/api/chats', auth, chatRoutes);
-app.use('/api/bookings', auth, bookingRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Error Handling
 app.use((err, req, res, next) => {
