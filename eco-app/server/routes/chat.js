@@ -1,4 +1,102 @@
 import express from 'express';
+import axios from 'axios';
+
+const router = express.Router();
+
+function detectIntent(message) {
+  const msg = message.toLowerCase();
+  if (msg.includes("near") || msg.includes("nearby")) return "nearby";
+  if (msg.includes("plan") || msg.includes("itinerary")) return "plan";
+  if (msg.includes("food") || msg.includes("restaurant")) return "food";
+  return "general";
+}
+
+async function getNearbyPlaces(lat, lng) {
+  // Replace with Google Places API later
+  return [
+    { name: "Robber's Cave", distance: "6 km" },
+    { name: "Sahastradhara", distance: "14 km" },
+  ];
+}
+
+async function getAIResponse(message) {
+  const apiKey = process.env.OPENAI_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("OPENAI_API_KEY is not configured on the server.");
+  }
+
+  const res = await axios.post(
+    "https://api.openai.com/v1/chat/completions",
+    {
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content: `You are a travel assistant for India.\nGive helpful, short, practical travel advice.\n\nInclude:\n- places\n- time required\n- tips\n- budget suggestions\n`,
+        },
+        { role: "user", content: message },
+      ],
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  return res.data.choices[0].message.content;
+}
+
+router.post('/', async (req, res) => {
+  try {
+    const { message, location } = req.body;
+
+    // Validate input
+    if (!message || typeof message !== 'string' || message.trim().length === 0) {
+      return res.status(400).json({ error: "Message is required and must be a non-empty string." });
+    }
+
+    const intent = detectIntent(message);
+
+    if (intent === "nearby" && location) {
+      const places = await getNearbyPlaces(location.lat, location.lng);
+      return res.json({
+        reply: `Here are some places nearby:\n\n${places
+          .map((p) => `• ${p.name} (${p.distance})`)
+          .join("\n")}`,
+      });
+    }
+
+    const aiReply = await getAIResponse(message);
+    res.json({ reply: aiReply });
+  } catch (err) {
+    console.error("Chat route error:", err.message || err);
+
+    // Distinguish OpenAI API errors
+    if (err.response && err.response.status) {
+      const status = err.response.status;
+      if (status === 401) {
+        return res.status(500).json({ error: "OpenAI API key is invalid or expired. Please check server configuration." });
+      }
+      if (status === 429) {
+        return res.status(500).json({ error: "OpenAI rate limit exceeded. Please try again later." });
+      }
+      return res.status(500).json({ error: `OpenAI API error (${status}): ${err.response.data?.error?.message || "Unknown error"}` });
+    }
+
+    // Handle missing API key or other server errors
+    if (err.message && err.message.includes("OPENAI_API_KEY")) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    res.status(500).json({ error: "Something went wrong. Please try again later." });
+  }
+});
+
+export default router;
+import express from 'express';
 import auth from '../middleware/auth.js';
 import Chat from '../models/Chat.js';
 import User from '../models/User.js';
