@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Search, MapPin, Users, Star, ArrowRight, Leaf, Shield, Heart } from 'lucide-react';
 import TrekCard from '../components/TrekCard';
 import WeatherWidget from '../components/WeatherWidget';
+import EcoQuoteTicker from '../components/EcoQuoteTicker';
 import { trekApi } from '../services/api';
 import '../styles/Home.css';
 
@@ -91,6 +92,8 @@ const Home = () => {
               </button>
             </div>
           </form>
+
+          <EcoQuoteTicker />
 
           <div className="quick-actions">
             <Link to="/planner" className="quick-action-button">
