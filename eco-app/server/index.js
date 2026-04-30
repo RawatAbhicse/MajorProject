@@ -12,6 +12,7 @@ import authRoutes from './routes/auth.js';
 import userRoutes from './routes/users.js';
 import friendRoutes from './routes/friends.js';
 import chatRoutes from './routes/chat.js';
+import aiChatRoutes from './routes/ai-chat.js';
 import bookingRoutes from './routes/bookings.js';
 import authMiddleware from './middleware/auth.js';
 
@@ -46,6 +47,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', authMiddleware, userRoutes);
 app.use('/api/friends', authMiddleware, friendRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/ai-chat', aiChatRoutes);
 app.use('/api/bookings', authMiddleware, bookingRoutes);
 
 // Error Handling
