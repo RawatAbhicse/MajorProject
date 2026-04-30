@@ -19,7 +19,7 @@ import FriendsChat from './pages/FriendsChat';
 import Messages from './pages/Messages';
 import GuideChat from './pages/GuideChat';
 import './App.css';
-import ChatbotSidebar from "./components/ChatbotSidebar.tsx";
+import ChatbotSidebar from "./components/ChatbotSidebar";
 
 const PublicRoute = ({ children }) => {
   const { user, loading } = useAuth();

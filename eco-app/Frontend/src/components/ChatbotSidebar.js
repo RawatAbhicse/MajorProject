@@ -5,16 +5,11 @@ import ChatMessage from "./ChatMessage";
 import "../styles/Chatbot.css";
 // Bot icon will be imported in Navbar
 
-interface ChatbotSidebarProps {
-  open?: boolean;
-  onClose?: () => void;
-}
-
-export default function ChatbotSidebar({ open = false, onClose }: ChatbotSidebarProps) {
+export default function ChatbotSidebar({ open = false, onClose }) {
   const [isOpen, setIsOpen] = useState(open);
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const [location, setLocation] = useState<any>(null);
+  const [location, setLocation] = useState(null);
   const [isSending, setIsSending] = useState(false);
 
   // Sync with external open prop
@@ -75,7 +70,7 @@ export default function ChatbotSidebar({ open = false, onClose }: ChatbotSidebar
       }
 
       setInput("");
-    } catch (err: any) {
+    } catch (err) {
       setMessages((prev) => [
         ...prev,
         { role: "error", content: err?.message || "Network error" },

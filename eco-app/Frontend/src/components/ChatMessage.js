@@ -1,7 +1,6 @@
-import { Message } from "../types/chat";
 import "../styles/Chatbot.css";
 
-export default function ChatMessage({ msg }: { msg: Message }) {
+export default function ChatMessage({ msg }) {
   const roleClass =
     msg.role === "user"
       ? "chat-message--user"
