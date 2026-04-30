@@ -15,6 +15,7 @@ export default function ChatbotSidebar({ open = false, onClose }: ChatbotSidebar
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState("");
   const [location, setLocation] = useState<any>(null);
+  const [isSending, setIsSending] = useState(false);
 
   // Sync with external open prop
   useEffect(() => {
@@ -39,29 +40,49 @@ export default function ChatbotSidebar({ open = false, onClose }: ChatbotSidebar
 
   // 📤 Send message
   const sendMessage = async () => {
-    if (!input) return;
+    if (!input || isSending) return;
 
     const userMsg = { role: "user", content: input };
     setMessages((prev) => [...prev, userMsg]);
+    setIsSending(true);
 
-    const res = await fetch("/api/ai-chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        message: input,
-        location,
-      }),
-    });
+    try {
+      const res = await fetch("/api/ai-chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: input,
+          location,
+        }),
+      });
 
+      const data = await res.json().catch(() => null);
 
-    const data = await res.json();
+      if (!res.ok) {
+        const msg = data?.error || `Request failed (${res.status})`;
+        setMessages((prev) => [...prev, { role: "error", content: msg }]);
+        return;
+      }
 
-    setMessages((prev) => [
-      ...prev,
-      { role: "assistant", content: data.reply },
-    ]);
+      const reply = data?.reply || "Sorry, I couldn't generate a reply.";
+      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
 
-    setInput("");
+      if (data?.aiUsed === false && data?.aiError) {
+        setMessages((prev) => [
+          ...prev,
+          { role: "error", content: `AI unavailable: ${data.aiError}` },
+        ]);
+      }
+
+      setInput("");
+    } catch (err: any) {
+      setMessages((prev) => [
+        ...prev,
+        { role: "error", content: err?.message || "Network error" },
+      ]);
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -112,12 +133,14 @@ export default function ChatbotSidebar({ open = false, onClose }: ChatbotSidebar
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                   placeholder="Ask about travel..."
+                  disabled={isSending}
                 />
                 <button
                   onClick={sendMessage}
                   className="chatbot-send-btn"
+                  disabled={isSending}
                 >
-                  Send
+                  {isSending ? "Sending..." : "Send"}
                 </button>
               </div>
             </div>
